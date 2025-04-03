@@ -31,5 +31,12 @@ public class MainController {
         System.out.println(response);
     }
 
+    @GetMapping("/echotest/{arg}")
+    public String echotest(@PathVariable String arg){
+        System.out.println(arg);
+        return arg;
+    }
+
+
 
 }
