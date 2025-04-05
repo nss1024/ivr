@@ -19,12 +19,16 @@ public class PythonProcessManager {
     private ProcessTimer processTimer;
     boolean processStarted=false;
 
-    public void startProcess(String url, String fileName) {
+    public String startProcess(String url, String fileName) {
         String processUUID= UUID.randomUUID().toString().replace("-", "");//generate a unique process id, it will be used in a url so need to remove "-"
+
+        if(url.equals(null)){
+            url="local";
+        }
 
         Timer timer = new Timer();
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "C:/Scripts/processFile.py",processUUID, fileName);
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/pyscripts/local_vosk_mic.py",processUUID, fileName);
             Process process= processBuilder.start();
             timer.schedule(new ProcessTimer(this,processUUID), 5000);
             System.out.println("Process added to storage");
@@ -52,7 +56,7 @@ public class PythonProcessManager {
             }
 
         }
-
+        return processUUID;
     }
 
     public void removeProcess(String processUUID){
