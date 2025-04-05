@@ -56,7 +56,8 @@ public class PythonProcessManager {
             }
 
         }
-        return processUUID;
+        if(processStarted){ return processUUID;}
+        else{return "process_error";}
     }
 
     public void removeProcess(String processUUID){
