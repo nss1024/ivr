@@ -1,5 +1,7 @@
 package com.aiivr.processingHub.subProcessManager;
 
+import com.aiivr.processingHub.logger.Logger;
+import com.aiivr.processingHub.processData.ProcessData;
 import com.aiivr.processingHub.storage.ProcessStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,7 +20,10 @@ public class PythonProcessManager {
     private ProcessTimer processTimer;
     boolean processStarted=true;
 
-    public String startProcess(String url, String fileName) {
+    @Autowired
+    Logger logger;
+
+    public String startProcess(String url, String fileName,String serviceId) {
         String processUUID= UUID.randomUUID().toString().replace("-", "");//generate a unique process id, it will be used in a url so need to remove "-"
 
         if(url.isBlank()){
@@ -28,13 +33,13 @@ public class PythonProcessManager {
         Timer timer = new Timer();
         try {
             System.out.println("File name passed to script: "+ fileName);
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/norbert/PycharmProjects/whisperProject/whispertest.py",processUUID, fileName);
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "/home/norbert/PycharmProjects/whisperProject/whispertest.py",processUUID, fileName,serviceId);
             //ProcessBuilder processBuilder = new ProcessBuilder("python3","--version");
             Process process= processBuilder.start();
             timer.schedule(new ProcessTimer(this,processUUID), 5000);
             System.out.println("Process added to storage");
 
-            processStorage.addProcess(processUUID,url);
+            processStorage.addProcess(processUUID,url,serviceId);
             AtomicReference<String> confirmationMessage= new AtomicReference<>("");
             //Consume stdout of script
             new Thread(() -> {
@@ -42,9 +47,9 @@ public class PythonProcessManager {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         System.out.println("PYTHON STDOUT: " + line);
+                        logger.logData(processUUID+":"+line);
                         if(line.equals("Processing started")){
                             timer.cancel();
-                            break;
                         }
                     }
                 } catch (IOException e) {
@@ -58,6 +63,7 @@ public class PythonProcessManager {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         System.err.println("PYTHON STDERR: " + line);
+                        logger.logData(processUUID+":"+line);
                         timer.cancel();
                     }
                 } catch (IOException e) {

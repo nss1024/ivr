@@ -26,20 +26,21 @@ public class MainController {
     @Autowired
     ResponseStorage responseStorage;
 
+
     //Requests in from Lus -> Java hub receives requests from Lua
-    @GetMapping("/processAudio/{fileName}/{responseUrl}")
-    public String processAudio(@PathVariable String fileName, @PathVariable String responseUrl) {
+    @GetMapping("/processAudio/{fileName}/{responseUrl}/{serviceId}")
+    public String processAudio(@PathVariable String fileName, @PathVariable String responseUrl, @PathVariable String serviceId) {
         //File name to be passed to the python script
         //need to generate a task id and construct post mapping based on the task id
-        return pythonProcessManager.startProcess(responseUrl,fileName);
+        return pythonProcessManager.startProcess(responseUrl,fileName,serviceId);
     }
 
-    @GetMapping("/processAudio/{filename}")
-    public String processAudioResponse(@PathVariable String filename){
-        return pythonProcessManager.startProcess("",filename);
+    @GetMapping("/processAudio/{filename}/{serviceId}")
+    public String processAudioResponse(@PathVariable String filename, @PathVariable String serviceId){
+        return pythonProcessManager.startProcess("",filename,serviceId);
     }
 
-    //Requests in from Pythin -> Once processing complete, Python sends request to Java
+    //Requests in from Python -> Once processing complete, Python sends request to Java
     @PostMapping("/processingComplete/{processId}")
     public void processComplete(@PathVariable String processId, @RequestBody String response) {
         //process Python response and forward response to relevant url
