@@ -36,14 +36,15 @@ public class MainController {
 
     @GetMapping("/processAudio/{filename}")
     public String processAudioResponse(@PathVariable String filename){
-        return pythonProcessManager.startProcess(null,filename);
+        return pythonProcessManager.startProcess("",filename);
     }
 
     //Requests in from Pythin -> Once processing complete, Python sends request to Java
     @PostMapping("/processingComplete/{processId}")
     public void processComplete(@PathVariable String processId, @RequestBody String response) {
         //process Python response and forward response to relevant url
-            responseStorage.addProcess(processId,response);
+            //responseStorage.addProcess(processId,response);
+        System.out.println(response);
     }
 
     //Test endpoint
