@@ -37,4 +37,8 @@ public class ProcessData {
     public void setProcessId(String processId) {
         this.processId = processId;
     }
+
+    public long getCreateTimeStamp() {
+        return createTimeStamp;
+    }
 }

@@ -1,25 +1,36 @@
 package com.aiivr.processingHub.storage;
 
+import com.aiivr.processingHub.processData.ResponseData;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ResponseStorage {
 
-   private final ConcurrentHashMap<String, String> responses = new ConcurrentHashMap<String, String>();
+   private final ConcurrentHashMap<String, ResponseData> responses = new ConcurrentHashMap<String, ResponseData>();
 
    public void addProcess(String processId,String processResponse) {
-       responses.put(processId, processResponse);
+       responses.put(processId, new ResponseData(processId,processResponse));
    }
 
-   public String getUrl(String processId) {
-       return responses.get(processId);
-   }
-
-   public void removeProcess(String processId) {
+   public void removeResponseObject(String processId) {
        responses.remove(processId);
    }
 
+   public String getResponse(String processId){
+       String resp= responses.get(processId).getResponse();
+       responses.remove(processId);
+       return resp;
+   }
+
+   public Set<String> getKeys(){
+       return responses.keySet();
+   }
+
+   public ResponseData getReponseObject(String processId){
+       return responses.get(processId);
+   }
 
 }

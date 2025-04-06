@@ -1,5 +1,6 @@
 package com.aiivr.processingHub;
 
+import com.aiivr.processingHub.monitor.StorageMonitor;
 import com.aiivr.processingHub.storage.ProcessStorage;
 import com.aiivr.processingHub.storage.ResponseStorage;
 import com.aiivr.processingHub.subProcessManager.PythonProcessManager;
@@ -26,6 +27,8 @@ public class MainController {
     @Autowired
     ResponseStorage responseStorage;
 
+    @Autowired
+    StorageMonitor storageMonitor;
 
     //Requests in from Lus -> Java hub receives requests from Lua
     @GetMapping("/processAudio/{fileName}/{responseUrl}/{serviceId}")

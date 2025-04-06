@@ -3,6 +3,7 @@ package com.aiivr.processingHub.storage;
 import com.aiivr.processingHub.processData.ProcessData;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -14,12 +15,16 @@ public class ProcessStorage {
        processes.put(processId, new ProcessData(processId,url,serviceId));
    }
 
-   public ProcessData getUrl(String processId) {
+   public ProcessData getProcess(String processId) {
        return processes.get(processId);
    }
 
    public void removeProcess(String processId) {
        processes.remove(processId);
+   }
+
+   public Set<String> getkeys(){
+       return processes.keySet();
    }
 
 
