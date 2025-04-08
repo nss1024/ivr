@@ -20,8 +20,13 @@ public class ResponseStorage {
    }
 
    public String getResponse(String processId){
-       String resp= responses.get(processId).getResponse();
-       responses.remove(processId);
+       String resp=null;
+        if(!responses.isEmpty()){
+            if(responses.get(processId).getResponse()!=null) {
+            resp = responses.get(processId).getResponse();
+            responses.remove(processId);
+        }
+       }
        return resp;
    }
 

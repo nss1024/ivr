@@ -47,9 +47,23 @@ public class MainController {
     @PostMapping("/processingComplete/{processId}")
     public void processComplete(@PathVariable String processId, @RequestBody String response) {
         //process Python response and forward response to relevant url
-            //responseStorage.addProcess(processId,response);
+           responseStorage.addProcess(processId,response);
         System.out.println(response);
     }
+
+    //Return available response to Lua
+    @GetMapping("/responseReady/{processId}")
+    public String responseReady(@PathVariable String processId){
+        if(responseStorage.getResponse(processId)!=null){
+            System.out.println("Returning response"+responseStorage.getResponse(processId));
+            return responseStorage.getResponse(processId);
+
+        }else{
+            System.out.println("Response not ready ");
+            return "no_response";
+        }
+    }
+
 
     //Test endpoint
     @GetMapping("/echotest/{arg}")

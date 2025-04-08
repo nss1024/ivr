@@ -42,6 +42,7 @@ public class StorageMonitor {
                     if (now - process.getCreateTimeStamp() > cleanupIntervalMinutes) {
                         processStorage.removeProcess(key);
                         logger.logData("Storage monitor removed process "+key+" due to expired TTL of "+cleanupIntervalMinutes);
+                        System.out.println("Storage monitor removed process "+key+"from process store due to expired TTL of "+cleanupIntervalMinutes);
                     }
                 } else {
                     // Optional: log that process was already null or removed
@@ -54,6 +55,7 @@ public class StorageMonitor {
                     if (now - response.getReceivedTimestamp() > cleanupIntervalMinutes) {
                         responseStorage.removeResponseObject(key);
                         logger.logData("Storage monitor removed process "+key+" due to expired TTL of "+cleanupIntervalMinutes);
+                        System.out.println("Storage monitor removed process "+key+"from response store due to expired TTL of "+cleanupIntervalMinutes);
                     }
                 } else {
                     // Optional: log that response was already null or removed
