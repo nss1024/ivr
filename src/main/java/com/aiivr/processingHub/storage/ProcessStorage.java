@@ -11,8 +11,8 @@ public class ProcessStorage {
 
    private final ConcurrentHashMap<String, ProcessData> processes = new ConcurrentHashMap<String, ProcessData>();
 
-   public void addProcess(String processId,String url,String serviceId) {
-       processes.put(processId, new ProcessData(processId,url,serviceId));
+   public void addProcess(String processId,String url,String serviceId,String fileName){
+       processes.put(processId, new ProcessData(processId,url,serviceId,fileName));
    }
 
    public ProcessData getProcess(String processId) {
@@ -25,6 +25,10 @@ public class ProcessStorage {
 
    public Set<String> getkeys(){
        return processes.keySet();
+   }
+
+   public boolean hasKey(String key){
+       return processes.containsKey(key);
    }
 
 

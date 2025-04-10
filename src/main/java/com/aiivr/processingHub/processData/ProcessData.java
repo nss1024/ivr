@@ -5,12 +5,14 @@ public class ProcessData {
     String url;
     String serviceId;
     String processId;
+    String fileName;
     long createTimeStamp;
 
-    public ProcessData(String processId,String url, String serviceId ) {
+    public ProcessData(String processId,String url, String serviceId, String fileName ) {
         this.url = url;
         this.serviceId = serviceId;
         this.processId = processId;
+        this.fileName=fileName;
         this.createTimeStamp = System.currentTimeMillis();
     }
 
@@ -36,6 +38,14 @@ public class ProcessData {
 
     public void setProcessId(String processId) {
         this.processId = processId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public long getCreateTimeStamp() {

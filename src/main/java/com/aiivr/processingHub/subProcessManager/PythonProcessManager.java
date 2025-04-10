@@ -39,7 +39,7 @@ public class PythonProcessManager {
             timer.schedule(new ProcessTimer(this,processUUID), 5000);
             System.out.println("Process added to storage");
 
-            processStorage.addProcess(processUUID,url,serviceId);
+            processStorage.addProcess(processUUID,url,serviceId,fileName);
             AtomicReference<String> confirmationMessage= new AtomicReference<>("");
             //Consume stdout of script
             new Thread(() -> {

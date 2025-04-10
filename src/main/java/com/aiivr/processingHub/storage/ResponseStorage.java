@@ -24,7 +24,6 @@ public class ResponseStorage {
         if(!responses.isEmpty()){
             if(responses.get(processId).getResponse()!=null) {
             resp = responses.get(processId).getResponse();
-            responses.remove(processId);
         }
        }
        return resp;
@@ -36,6 +35,10 @@ public class ResponseStorage {
 
    public ResponseData getReponseObject(String processId){
        return responses.get(processId);
+   }
+
+   public boolean hasKey(String key){
+       return responses.containsKey(key);
    }
 
 }

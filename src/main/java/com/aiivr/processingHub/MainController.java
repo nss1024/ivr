@@ -1,6 +1,9 @@
 package com.aiivr.processingHub;
 
+import com.aiivr.processingHub.fileoperations.RemoveUsedFile;
+import com.aiivr.processingHub.logger.Logger;
 import com.aiivr.processingHub.monitor.StorageMonitor;
+import com.aiivr.processingHub.resourceManagement.ResourceManager;
 import com.aiivr.processingHub.storage.ProcessStorage;
 import com.aiivr.processingHub.storage.ResponseStorage;
 import com.aiivr.processingHub.subProcessManager.PythonProcessManager;
@@ -30,6 +33,13 @@ public class MainController {
     @Autowired
     StorageMonitor storageMonitor;
 
+    @Autowired
+    ResourceManager resourceManager;
+
+    @Autowired
+    Logger logger;
+
+
     //Requests in from Lus -> Java hub receives requests from Lua
     @GetMapping("/processAudio/{fileName}/{responseUrl}/{serviceId}")
     public String processAudio(@PathVariable String fileName, @PathVariable String responseUrl, @PathVariable String serviceId) {
@@ -48,15 +58,22 @@ public class MainController {
     public void processComplete(@PathVariable String processId, @RequestBody String response) {
         //process Python response and forward response to relevant url
            responseStorage.addProcess(processId,response);
-        System.out.println(response);
     }
 
     //Return available response to Lua
     @GetMapping("/responseReady/{processId}")
     public String responseReady(@PathVariable String processId){
+
         if(responseStorage.getResponse(processId)!=null){
-            System.out.println("Returning response"+responseStorage.getResponse(processId));
-            return responseStorage.getResponse(processId);
+            String result =responseStorage.getResponse(processId);
+                try {//try to clear up resources
+                    resourceManager.clearStorageAndFile(processId);
+                }catch(Exception e){
+                    System.out.println("Failed to clear uo resources!");
+                    logger.logData("Failed to clear uo resources!");
+                    logger.logData(e.toString());
+                }
+            return result;
 
         }else{
             System.out.println("Response not ready ");
